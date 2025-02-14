@@ -24,6 +24,7 @@ def webServer(port=13331):
     try:
       message = connectionSocket.recv(1024)#Fill in start -a client is sending you a message   #Fill in end
       filename = message.split()[1]
+      print(filename)
       print("post message and filename")
       #opens the client requested file. 
       #Plenty of guidance online on how to open and read a file in python. How should you read it though if you plan on sending it through a socket?
@@ -33,7 +34,7 @@ def webServer(port=13331):
       print("post open file")
       #This variable can store the headers you want to send for any valid or invalid request.   What header should be sent for a response that is ok?    
       #Fill in start 
-      tempHeader = "200 OK\r\n\r\n"
+      tempHeader = b"HTTP/1.0 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n"
       #Content-Type is an example on how to send a header as bytes. There are more!
       outputdata = b"Content-Type: text/html; charset=UTF-8\r\n"
       #Note that a complete header must end with a blank line, creating the four-byte sequence "\r\n\r\n" Refer to https://w3.cs.jmu.edu/kirkpams/OpenCSF/Books/csf/html/TCPSockets.html
@@ -42,20 +43,18 @@ def webServer(port=13331):
                
       for i in f: #for line in file
       #Fill in start - append your html file contents #Fill in end
-        print("test")
-        print(i)
-        outputdata += i
-        f = open(filename, "a")
-        f.write(i)
-      f.write(tempHeader)
+        tempHeader += i.encode()
+        # f = open(filename, "a")
+        # f.write(i)
+        # f.write(tempHeader)
       #Send the content of the requested file to the client (don't forget the headers you created)!
       #Send everything as one send command, do not send one line/item at a time!
 
       # Fill in start
-
-
+      print(tempHeader)
+      connectionSocket.sendall(tempHeader)
       # Fill in end
-        
+      #   127.0.0.1:13331/helloworld.html
       connectionSocket.close() #closing the connection socket
       
     except Exception as e:
