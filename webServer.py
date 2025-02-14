@@ -62,7 +62,7 @@ def webServer(port=13331):
       # Remember the format you used in the try: block!
       #Fill in start
       print("exception ", e)
-      tempHeader = b"HTTP/1.0 404 Not Found\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n"
+      tempHeader = b"HTTP/1.0 404 Not Found\r\nServer: webServer\r\nConnection: close\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n"
       e = e.__str__()
       tempHeader += e.encode()
       connectionSocket.sendall(tempHeader)
